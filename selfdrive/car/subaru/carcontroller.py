@@ -53,6 +53,13 @@ class CarController():
 
       lkas_enabled = enabled
 
+      # noise generation
+      if (frame % 10) and enabled:
+        if apply_steer < 0:
+          apply_steer += 1
+        else
+          apply_steer -= 1
+
       if not lkas_enabled:
         apply_steer = 0
 
