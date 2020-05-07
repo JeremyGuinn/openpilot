@@ -211,7 +211,7 @@ static void ui_init(UIState *s) {
 
   pthread_mutex_init(&s->lock, NULL);
   s->sm = new SubMaster({"model", "controlsState", "uiLayoutState", "liveCalibration", "radarState", "thermal",
-                         "health", "ubloxGnss", "driverState", "dMonitoringState", "offroadLayout", "carState"
+                         "health", "ubloxGnss", "driverState", "dMonitoringState", "offroadLayout", "carState", "gpsLocationExternal"
 #ifdef SHOW_SPEEDLIMIT
                                     , "liveMapData"
 #endif
@@ -342,6 +342,12 @@ void handle_message(UIState *s, SubMaster &sm) {
     scene.gps_planner_active = data.getGpsPlannerActive();
     scene.monitoring_active = data.getDriverMonitoringOn();
     scene.decel_for_model = data.getDecelForModel();
+
+    // ENG UI START
+    scene.angleSteers = data.getAngleSteers();
+    scene.angleSteersDes = data.getAngleSteersDes();
+    // ENG UI END
+
     auto alert_sound = data.getAlertSound();
     const auto sound_none = cereal::CarControl::HUDControl::AudibleAlert::NONE;
     if (alert_sound != s->alert_sound){
@@ -444,6 +450,23 @@ void handle_message(UIState *s, SubMaster &sm) {
     scene.thermalStatus = data.getThermalStatus();
     scene.paTemp = data.getPa0();
 
+    // ENG UI START
+    scene.maxCpuTemp = data.getCpu0();
+    if (scene.maxCpuTemp < data.getCpu1())
+    {
+      scene.maxCpuTemp = data.getCpu1();
+    }
+    else if (scene.maxCpuTemp < data.getCpu2())
+    {
+      scene.maxCpuTemp = data.getCpu2();
+    }
+    else if (scene.maxCpuTemp < data.getCpu3())
+    {
+      scene.maxCpuTemp = data.getCpu3();
+    }
+    scene.maxBatTemp = data.getBat();
+    // ENG UI END
+    
     s->thermal_started = data.getStarted();
   }
   if (sm.updated("ubloxGnss")) {
@@ -468,6 +491,16 @@ void handle_message(UIState *s, SubMaster &sm) {
     scene.is_rhd = data.getIsRHD();
     scene.awareness_status = data.getAwarenessStatus();
     s->preview_started = data.getIsPreview();
+  // ENG UI START
+  } else if (which == cereal::Event::GPS_LOCATION_EXTERNAL) {
+    auto data = event.getGpsLocationExternal();
+    scene.gpsAccuracy = data.getAccuracy();
+    // set default values for display
+    if (scene.gpsAccuracy == 0 || scene.gpsAccuracy > 100)
+    {
+      scene.gpsAccuracy = 99.99;
+    }
+  // ENG UI END
   }
   if (sm.updated("carState")) {
     auto data = sm["carState"].getCarState();
