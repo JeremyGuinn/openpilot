@@ -90,8 +90,8 @@ class CarState(CarStateBase):
       ("DOOR_OPEN_FL", "BodyInfo", 1),
       ("DOOR_OPEN_RR", "BodyInfo", 1),
       ("DOOR_OPEN_RL", "BodyInfo", 1),
-      ("Gear", "Transmission", 0),
       ("Units", "Dash_State", 1),
+      ("Gear", "Transmission", 0),
     ]
 
     checks = [
@@ -105,7 +105,7 @@ class CarState(CarStateBase):
         ("Dashlights", 10),
         ("BodyInfo", 10),
         ("CruiseControl", 20),
-      ]
+     ]
 
     if CP.carFingerprint == CAR.FORESTER:
       checks += [
@@ -113,7 +113,6 @@ class CarState(CarStateBase):
         ("BodyInfo", 1),
         ("CruiseControl", 50),
       ]
-
 
     if CP.carFingerprint in [CAR.OUTBACK, CAR.LEGACY]:
       checks += [
@@ -128,6 +127,7 @@ class CarState(CarStateBase):
     if CP.carFingerprint == CAR.IMPREZA:
       signals = [
         ("Cruise_Set_Speed", "ES_DashStatus", 0),
+
         ("Counter", "ES_Distance", 0),
         ("Signal1", "ES_Distance", 0),
         ("Signal2", "ES_Distance", 0),
@@ -164,27 +164,26 @@ class CarState(CarStateBase):
 
     if CP.carFingerprint in [CAR.OUTBACK, CAR.LEGACY, CAR.FORESTER]:
       signals = [
-        ("Brake_On", "ES_CruiseThrottle", 0),
-        ("Button", "ES_CruiseThrottle", 0),
-        ("CloseDistance", "ES_CruiseThrottle", 0),
-        ("Counter", "ES_CruiseThrottle", 0),
-        ("Cruise_Activatedish", "ES_CruiseThrottle", 0),
-        ("DistanceSwap", "ES_CruiseThrottle", 0),
-        ("ES_Error", "ES_CruiseThrottle", 0),
-        ("NEW_SIGNAL_1", "ES_CruiseThrottle", 0),
-        ("Unknown", "ES_CruiseThrottle", 0),
-        ("SET_0_1", "ES_CruiseThrottle", 0),
-        ("SET_0_2", "ES_CruiseThrottle", 0),
-        ("SET_0_3", "ES_CruiseThrottle", 0),
-        ("SET_0_4", "ES_CruiseThrottle", 0),
-        ("SET_1", "ES_CruiseThrottle", 0),
-        ("SET_2", "ES_CruiseThrottle", 0),
-        ("NEW_SIGNAL_9", "ES_CruiseThrottle", 0),
-        ("Standstill", "ES_CruiseThrottle", 0),
-        ("Standstill_2", "ES_CruiseThrottle", 0),
-        ("Throttle_Cruise", "ES_CruiseThrottle", 0),
-        ("Not_Ready_Startup", "ES_DashStatus", 0),
         ("Cruise_Set_Speed", "ES_DashStatus", 0),
+        ("Not_Ready_Startup", "ES_DashStatus", 0),
+
+        ("Throttle_Cruise", "ES_CruiseThrottle", 0),
+        ("Signal1", "ES_CruiseThrottle", 0),
+        ("Cruise_Activated", "ES_CruiseThrottle", 0),
+        ("Signal2", "ES_CruiseThrottle", 0),
+        ("Brake_On", "ES_CruiseThrottle", 0),
+        ("DistanceSwap", "ES_CruiseThrottle", 0),
+        ("Standstill", "ES_CruiseThrottle", 0),
+        ("Signal3", "ES_CruiseThrottle", 0),
+        ("CloseDistance", "ES_CruiseThrottle", 0),
+        ("Signal4", "ES_CruiseThrottle", 0),
+        ("Standstill_2", "ES_CruiseThrottle", 0),
+        ("ES_Error", "ES_CruiseThrottle", 0),
+        ("Signal5", "ES_CruiseThrottle", 0),
+        ("Counter", "ES_CruiseThrottle", 0),
+        ("Signal6", "ES_CruiseThrottle", 0),
+        ("Button", "ES_CruiseThrottle", 0),
+        ("Signal7", "ES_CruiseThrottle", 0),
       ]
 
       checks = [
