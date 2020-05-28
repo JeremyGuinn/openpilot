@@ -510,6 +510,17 @@ void handle_message(UIState *s, SubMaster &sm) {
     }
   // ENG UI END
   }
+  if (sm.updated("carState")) {
+    auto data = sm["carState"].getCarState();
+    auto gear = data.getGearShifter();
+    //printf("gear: %hu\n", gear);
+    if (gear == cereal::CarState::GearShifter::REVERSE) {
+      s->reverse_gear_timer++;
+    }
+    else {
+      s->reverse_gear_timer = 0;
+    }
+  }
 
   s->started = s->thermal_started || s->preview_started ;
   // Handle onroad/offroad transition
@@ -527,16 +538,6 @@ void handle_message(UIState *s, SubMaster &sm) {
 
     s->active_app = cereal::UiLayoutState::App::NONE;
     update_offroad_layout_state(s);
-  } else if (which == cereal::Event::CAR_STATE) {
-    auto data = event.getCarState();
-    auto gear = data.getGearShifter();
-    //printf("gear: %hu\n", gear);
-    if (gear == cereal::CarState::GearShifter::REVERSE) {
-      s->reverse_gear_timer++;
-    }
-    else {
-      s->reverse_gear_timer = 0;
-    }
   }
 }
 
