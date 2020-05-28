@@ -474,7 +474,7 @@ void handle_message(UIState *s, SubMaster &sm) {
     }
     scene.maxBatTemp = data.getBat();
     // ENG UI END
-    
+
     s->thermal_started = data.getStarted();
   }
   if (sm.updated("ubloxGnss")) {
@@ -499,6 +499,7 @@ void handle_message(UIState *s, SubMaster &sm) {
     scene.is_rhd = data.getIsRHD();
     scene.awareness_status = data.getAwarenessStatus();
     s->preview_started = data.getIsPreview();
+  }
   // ENG UI START
   if (sm.updated("gpsLocationExternal")) {
     auto data = sm["gpsLocationExternal"].getGpsLocationExternal();
@@ -508,8 +509,8 @@ void handle_message(UIState *s, SubMaster &sm) {
     {
       scene.gpsAccuracy = 99.99;
     }
-  // ENG UI END
   }
+  // ENG UI END
   if (sm.updated("carState")) {
     auto data = sm["carState"].getCarState();
     auto gear = data.getGearShifter();
