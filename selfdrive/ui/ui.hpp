@@ -271,6 +271,8 @@ typedef struct UIState {
 
   std::atomic<float> light_sensor;
 
+  int reverse_gear_timer;
+
   int touch_fd;
 
   // Hints for re-calculations and redrawing

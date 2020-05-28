@@ -211,7 +211,7 @@ static void ui_init(UIState *s) {
 
   pthread_mutex_init(&s->lock, NULL);
   s->sm = new SubMaster({"model", "controlsState", "uiLayoutState", "liveCalibration", "radarState", "thermal",
-                         "health", "ubloxGnss", "driverState", "dMonitoringState", "offroadLayout"
+                         "health", "ubloxGnss", "driverState", "dMonitoringState", "offroadLayout", "carState"
 #ifdef SHOW_SPEEDLIMIT
                                     , "liveMapData"
 #endif
@@ -468,6 +468,15 @@ void handle_message(UIState *s, SubMaster &sm) {
     scene.is_rhd = data.getIsRHD();
     scene.awareness_status = data.getAwarenessStatus();
     s->preview_started = data.getIsPreview();
+  }
+  if (sm.updated("carState")) {
+    auto data = sm["carState"].getCarState();
+    auto gear = data.getGearShifter();
+    if(gear == cereal::CarState::GearShifter::REVERSE) {
+      s->reverse_gear_timer++;
+    } else {
+      s->reverse_gear_timer = 0;
+    }
   }
 
   s->started = s->thermal_started || s->preview_started ;
@@ -888,7 +897,12 @@ int main(int argc, char* argv[]) {
       // always process events offroad
       check_messages(s);
     } else {
-      set_awake(s, true);
+      // blank screen while in reverse gear
+      if(s->reverse_gear_timer > 3 * UI_FREQ) {
+        set_awake(s, false);
+      } else {
+        set_awake(s, true);
+      }
       // Car started, fetch a new rgb image from ipc
       if (s->vision_connected){
         ui_update(s);
