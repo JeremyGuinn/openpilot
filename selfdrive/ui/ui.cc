@@ -898,7 +898,7 @@ int main(int argc, char* argv[]) {
       check_messages(s);
     } else {
       // blank screen while in reverse gear
-      if(s->reverse_gear_timer > 3 * UI_FREQ) {
+      if(s->reverse_gear_timer > 1 * UI_FREQ) {
         set_awake(s, false);
       } else {
         set_awake(s, true);
