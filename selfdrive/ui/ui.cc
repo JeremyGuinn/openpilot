@@ -492,8 +492,9 @@ void handle_message(UIState *s, SubMaster &sm) {
     scene.awareness_status = data.getAwarenessStatus();
     s->preview_started = data.getIsPreview();
   // ENG UI START
-  } else if (which == cereal::Event::GPS_LOCATION_EXTERNAL) {
-    auto data = event.getGpsLocationExternal();
+  }
+  if (sm.updated("gpsLocationExternal")) {
+    auto data = sm["gpsLocationExternal"].getGpsLocationExternal();
     scene.gpsAccuracy = data.getAccuracy();
     // set default values for display
     if (scene.gpsAccuracy == 0 || scene.gpsAccuracy > 100)
